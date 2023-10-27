@@ -3,14 +3,22 @@
   "editor.guides.bracketPairs": true,
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.codeActionsOnSave": [
-    "source.fixAll.eslint"
-  ],
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "vue"
-  ],
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "editor.codeActionsOnSave": ["source.fixAll.eslint"],
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "vue.autoInsert.dotValue": true,
+  "vue.inlayHints.missingProps": true,
+  "vue.inlayHints.optionsWrapper": true,
+  "vue.updateImportsOnFileMove.enabled": true,
+  "prettier.vueIndentScriptAndStyle": true,
+  "html.format.indentHandlebars": true,
+  "html.format.indentInnerHtml": true,
+  "html.format.wrapAttributesIndentSize": 120,
+  "volar.format.initialIndent": {
+    "javascript": true,
+    "html": true,
+    "typescript": true,
+    "vue": true
+  },
+  "prettier.printWidth": 120
 }
