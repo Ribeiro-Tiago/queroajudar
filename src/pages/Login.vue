@@ -4,7 +4,7 @@
       <div class="row">
         <q-card square class="shadow-24 q-pb-md" style="width: 600px">
           <q-card-section class="bg-primary">
-            <h2 class="text-h5 text-white q-my-sm">Iniciar sessão</h2>
+            <h2 class="text-h5 text-white q-my-xs">Iniciar sessão</h2>
           </q-card-section>
 
           <q-card-section>
