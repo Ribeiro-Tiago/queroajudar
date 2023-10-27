@@ -65,6 +65,7 @@
               color="secondary"
               class="full-width text-white"
               label="Iniciar sessão"
+              :loading="submitting"
               @click="submit"
             />
           </q-card-actions>
@@ -125,7 +126,8 @@ const submit = async () => {
   }
 
   submitting.value = true;
-  alert("submit!");
-  submitting.value = false;
+  setTimeout(() => {
+    submitting.value = false;
+  }, 2000);
 };
 </script>
