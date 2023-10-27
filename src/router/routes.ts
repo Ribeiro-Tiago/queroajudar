@@ -1,18 +1,18 @@
-import { RouteRecordRaw } from 'vue-router';
+import { RouteRecordRaw } from "vue-router";
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    path: "/",
+    component: () => import("layouts/MainLayout.vue"),
     children: [
       {
-        path: '',
-        component: () => import('src/pages/PostsPage.vue'),
+        path: "",
+        component: () => import("src/pages/PostsPage.vue"),
       },
       {
-        name: 'login',
-        path: '/login',
-        component: () => import('src/pages/LoginPage.vue'),
+        name: "login",
+        path: "/login",
+        component: () => import("src/pages/LoginPage.vue"),
       },
     ],
   },
@@ -20,8 +20,8 @@ const routes: RouteRecordRaw[] = [
   // Always leave this as last one,
   // but you can also remove it
   {
-    path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue'),
+    path: "/:catchAll(.*)*",
+    component: () => import("pages/ErrorNotFound.vue"),
   },
 ];
 
