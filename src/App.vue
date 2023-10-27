@@ -7,6 +7,6 @@
 </template>
 
 <script setup lang="ts">
-import NavBar from 'src/layouts/NavBar.vue';
-import MainLayout from 'src/layouts/MainLayout.vue';
+import NavBar from "src/layouts/NavBar.vue";
+import MainLayout from "src/layouts/MainLayout.vue";
 </script>
