@@ -37,6 +37,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-config-prettier", "virtual:48f4e40c22e2e3789392c36fd6aa0ff5fce99f38379ef9ffd3fffe2e962712891a17848b7bac663d4d13f681aa964a60d38e64808d362b1962069bfbc1b5505a#npm:8.10.0"],\
           ["eslint-plugin-vue", "virtual:48f4e40c22e2e3789392c36fd6aa0ff5fce99f38379ef9ffd3fffe2e962712891a17848b7bac663d4d13f681aa964a60d38e64808d362b1962069bfbc1b5505a#npm:9.18.1"],\
           ["pinia", "virtual:48f4e40c22e2e3789392c36fd6aa0ff5fce99f38379ef9ffd3fffe2e962712891a17848b7bac663d4d13f681aa964a60d38e64808d362b1962069bfbc1b5505a#npm:2.1.7"],\
+          ["postcss", "npm:8.4.31"],\
           ["prettier", "npm:2.8.8"],\
           ["quasar", "npm:2.13.0"],\
           ["typescript", "patch:typescript@npm%3A4.9.5#optional!builtin<compat/typescript>::version=4.9.5&hash=289587"],\
@@ -1335,7 +1336,7 @@ const RAW_RUNTIME_STATE =
           ["fraction.js", "npm:4.3.7"],\
           ["normalize-range", "npm:0.1.2"],\
           ["picocolors", "npm:1.0.0"],\
-          ["postcss", null],\
+          ["postcss", "npm:8.4.31"],\
           ["postcss-value-parser", "npm:4.2.0"]\
         ],\
         "packagePeers": [\
@@ -4741,6 +4742,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-config-prettier", "virtual:48f4e40c22e2e3789392c36fd6aa0ff5fce99f38379ef9ffd3fffe2e962712891a17848b7bac663d4d13f681aa964a60d38e64808d362b1962069bfbc1b5505a#npm:8.10.0"],\
           ["eslint-plugin-vue", "virtual:48f4e40c22e2e3789392c36fd6aa0ff5fce99f38379ef9ffd3fffe2e962712891a17848b7bac663d4d13f681aa964a60d38e64808d362b1962069bfbc1b5505a#npm:9.18.1"],\
           ["pinia", "virtual:48f4e40c22e2e3789392c36fd6aa0ff5fce99f38379ef9ffd3fffe2e962712891a17848b7bac663d4d13f681aa964a60d38e64808d362b1962069bfbc1b5505a#npm:2.1.7"],\
+          ["postcss", "npm:8.4.31"],\
           ["prettier", "npm:2.8.8"],\
           ["quasar", "npm:2.13.0"],\
           ["typescript", "patch:typescript@npm%3A4.9.5#optional!builtin<compat/typescript>::version=4.9.5&hash=289587"],\
