@@ -1,63 +1,59 @@
 <template>
-  <q-page class="window-height window-width row justify-center items-center">
-    <div class="column q-pa-lg">
-      <div class="row">
-        <q-card square class="shadow-24 q-pb-md" style="width: 600px">
-          <q-card-section class="bg-primary">
-            <h2 class="text-h5 text-white q-my-xs">Recuperar palavra passe</h2>
-          </q-card-section>
+  <q-page class="row justify-center items-center">
+    <q-card square class="shadow-24 q-pb-md" style="width: 600px">
+      <q-card-section class="bg-primary">
+        <h2 class="text-h5 text-white q-my-xs">Recuperar palavra passe</h2>
+      </q-card-section>
 
-          <q-card-section>
-            <q-form
-              greedy
-              no-error-focus
-              no-reset-focus
-              ref="form"
-              class="q-px-sm q-pt-sm"
-            >
-              <q-input
-                v-model="email"
-                square
-                clearable
-                lazy-rules
-                type="email"
-                label="Email"
-                :rules="[required, isEmail]"
-              >
-                <template v-slot:prepend>
-                  <q-icon name="email" />
-                </template>
-              </q-input>
-            </q-form>
-          </q-card-section>
-
-          <q-card-actions class="q-px-lg">
-            <q-btn
-              type="submit"
-              unelevated
-              size="md"
-              color="secondary"
-              class="full-width text-white"
-              label="Recuperar"
-              :loading="submitting"
-              @click="submit"
-            />
-          </q-card-actions>
-
-          <q-card-section
-            class="text-center q-pa-sm column justify-center items-center"
+      <q-card-section>
+        <q-form
+          greedy
+          no-error-focus
+          no-reset-focus
+          ref="form"
+          class="q-px-sm q-pt-sm"
+        >
+          <q-input
+            v-model="email"
+            square
+            clearable
+            lazy-rules
+            type="email"
+            label="Email"
+            :rules="[required, isEmail]"
           >
-            <router-link to="register" class="text-grey-6 q-pb-sm">
-              Criar conta
-            </router-link>
+            <template v-slot:prepend>
+              <q-icon name="email" />
+            </template>
+          </q-input>
+        </q-form>
+      </q-card-section>
 
-            <router-link to="login" class="text-grey-6 q-pb-sm">
-              Iniciar sessão
-            </router-link>
-          </q-card-section>
-        </q-card>
-      </div>
-    </div>
+      <q-card-actions class="q-px-lg">
+        <q-btn
+          type="submit"
+          unelevated
+          size="md"
+          color="secondary"
+          class="full-width text-white"
+          label="Recuperar"
+          :loading="submitting"
+          @click="submit"
+        />
+      </q-card-actions>
+
+      <q-card-section
+        class="text-center q-pa-sm column justify-center items-center"
+      >
+        <router-link to="register" class="text-grey-6 q-pb-sm">
+          Criar conta
+        </router-link>
+
+        <router-link to="login" class="text-grey-6 q-pb-sm">
+          Iniciar sessão
+        </router-link>
+      </q-card-section>
+    </q-card>
   </q-page>
 </template>
 
