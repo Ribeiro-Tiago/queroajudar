@@ -17,7 +17,6 @@
             <q-input
               v-model="name"
               square
-              clearable
               lazy-rules
               type="text"
               label="Nome"
@@ -31,7 +30,6 @@
             <q-input
               v-model="email"
               square
-              clearable
               lazy-rules
               type="email"
               label="Email"
@@ -45,7 +43,6 @@
             <q-input
               v-model="email2"
               square
-              clearable
               lazy-rules
               type="email"
               label="Repita email"
@@ -59,7 +56,6 @@
             <q-input
               v-model="password"
               square
-              clearable
               lazy-rules
               label="Palavra passe"
               autocorrect="off"

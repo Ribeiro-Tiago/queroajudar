@@ -16,7 +16,6 @@
           <q-input
             v-model="email"
             square
-            clearable
             lazy-rules
             type="email"
             label="Email"
