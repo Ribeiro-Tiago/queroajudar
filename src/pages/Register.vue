@@ -13,6 +13,7 @@
             no-reset-focus
             ref="form"
             class="q-px-sm q-pt-sm"
+            @keydown.enter="submit"
           >
             <q-input
               v-model="name"
@@ -97,7 +98,7 @@
               :rules="[
                 required,
                 isValidPassword,
-                match(email, 'Palavras passe'),
+                match(password, 'Palavras passe'),
               ]"
             >
               <template v-slot:prepend>
