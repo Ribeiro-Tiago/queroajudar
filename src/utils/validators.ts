@@ -9,10 +9,10 @@ export const isEmail = (val: string) => {
 };
 
 export const isValidPassword = (val: string) => {
-  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*d)[a-zA-Z\d]{8,}$/;
+  const passwordPattern = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,64}$/;
 
   return (
     passwordPattern.test(val) ||
-    "Tem que contar pelo menos 1 maiúscula, 1 minúscula, 1 número e 8 caracteres"
+    "Tem que ser entre 8-64 caracters e conter pelo menos 1 maiúscula, 1 minúscula e 1 número"
   );
 };
