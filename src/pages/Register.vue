@@ -20,6 +20,8 @@
               lazy-rules
               type="text"
               label="Nome"
+              :error="!!errors.name"
+              :error-message="errors.name"
               :rules="[required]"
             >
               <template v-slot:prepend>
@@ -33,6 +35,8 @@
               lazy-rules
               type="email"
               label="Email"
+              :error="!!errors.email"
+              :error-message="errors.email"
               :rules="[required, isEmail]"
             >
               <template v-slot:prepend>
@@ -62,6 +66,8 @@
               autocapitalize="off"
               autocomplete="off"
               spellcheck="false"
+              :error="!!errors.password"
+              :error-message="errors.password"
               :type="passwordFieldType"
               :rules="[required, isValidPassword]"
             >
@@ -126,15 +132,18 @@
 import { QInputProps, QForm } from "quasar";
 import { ref } from "vue";
 
+import { UserType } from "src/types/user";
 import { register } from "src/services/user.service";
 import { required, isEmail, isValidPassword } from "src/utils/validators";
+import { AxiosError } from "src/exceptions";
 
 const email = ref<string>("");
 const email2 = ref<string>("");
 const password = ref<string>("");
 const name = ref<string>("");
-const type = ref<string>("");
+const type = ref<UserType>("org");
 const userCreated = ref<boolean>(false);
+const errors = ref<{ [key: string]: string }>({});
 
 const form = ref<QForm>();
 const userTypes = ref([
@@ -176,12 +185,26 @@ const submit = async () => {
   submitting.value = true;
 
   try {
-    await register(email.value, password.value);
+    await register({
+      email: email.value,
+      password: password.value,
+      name: name.value,
+      type: type.value,
+    });
     userCreated.value = true;
   } catch (err) {
-    console.log("error", err);
-  }
+    if (err instanceof AxiosError) {
+      if (err.status === 422) {
+        // show form errors
+        for (const [field, error] of Object.entries(err.data.errors)) {
+          errors.value[field] = error;
+        }
 
-  submitting.value = false;
+        return;
+      }
+    }
+  } finally {
+    submitting.value = false;
+  }
 };
 </script>

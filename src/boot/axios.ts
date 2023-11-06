@@ -1,6 +1,8 @@
 import { boot } from "quasar/wrappers";
 import Axios, { AxiosInstance, AxiosStatic } from "axios";
+
 import { version } from "../../package.json";
+import { AxiosError } from "src/exceptions";
 
 declare module "@vue/runtime-core" {
   interface ComponentCustomProperties {
@@ -46,14 +48,6 @@ export default boot(({ app }) => {
 
       const { data, status } = error.response;
 
-      let errorMsg = data;
-
-      if (data.hasOwnProperty("error")) {
-        errorMsg = data.error;
-      } else if (data.hasOwnProperty("reason")) {
-        errorMsg = data.reason;
-      }
-
       // not authenticated
       if (status === 401) {
         return app.config.globalProperties.$router.replace("login");
@@ -61,20 +55,12 @@ export default boot(({ app }) => {
 
       // no permissions for action
       if (status === 403) {
-        //
+        // todo: handle this case
         console.error("no permissions");
         return;
       }
 
-      const { url, data: requestData } = error.config;
-
-      return Promise.reject({
-        error: errorMsg,
-        status,
-        request: { url, data: requestData },
-        response: error.response,
-        ...(data && { data }),
-      });
+      return Promise.reject(new AxiosError(data.reason, status, data.errors));
     }
   );
 
