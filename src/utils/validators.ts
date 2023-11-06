@@ -9,10 +9,14 @@ export const isEmail = (val: string) => {
 };
 
 export const isValidPassword = (val: string) => {
-  const passwordPattern = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,64}$/;
+  const passwordPattern = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,255}$/;
 
   return (
     passwordPattern.test(val) ||
-    "Tem que ser entre 8-64 caracters e conter pelo menos 1 maiúscula, 1 minúscula e 1 número"
+    "Tem que ser entre 8-255 caracters e conter pelo menos 1 maiúscula, 1 minúscula e 1 número"
   );
+};
+
+export const match = (valToMatch: string, key: string) => (val: string) => {
+  return valToMatch === val || `${key} não são iguais`;
 };

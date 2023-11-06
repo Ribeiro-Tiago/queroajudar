@@ -50,7 +50,7 @@
               lazy-rules
               type="email"
               label="Repita email"
-              :rules="[required, isEmail, emailMatch]"
+              :rules="[required, isEmail, match(email, 'Emails')]"
             >
               <template v-slot:prepend>
                 <q-icon name="email" />
@@ -70,6 +70,35 @@
               :error-message="errors.password"
               :type="passwordFieldType"
               :rules="[required, isValidPassword]"
+            >
+              <template v-slot:prepend>
+                <q-icon name="lock" />
+              </template>
+
+              <template v-slot:append>
+                <q-icon
+                  class="cursor-pointer"
+                  :name="visibilityIcon"
+                  @click="switchVisibility"
+                />
+              </template>
+            </q-input>
+
+            <q-input
+              v-model="password2"
+              square
+              lazy-rules
+              label="Repita palavra passe"
+              autocorrect="off"
+              autocapitalize="off"
+              autocomplete="off"
+              spellcheck="false"
+              :type="passwordFieldType"
+              :rules="[
+                required,
+                isValidPassword,
+                match(email, 'Palavras passe'),
+              ]"
             >
               <template v-slot:prepend>
                 <q-icon name="lock" />
@@ -134,12 +163,18 @@ import { ref } from "vue";
 
 import { UserType } from "src/types/user";
 import { register } from "src/services/user.service";
-import { required, isEmail, isValidPassword } from "src/utils/validators";
+import {
+  required,
+  isEmail,
+  isValidPassword,
+  match,
+} from "src/utils/validators";
 import { AxiosError } from "src/exceptions";
 
 const email = ref<string>("");
 const email2 = ref<string>("");
 const password = ref<string>("");
+const password2 = ref<string>("");
 const name = ref<string>("");
 const type = ref<UserType>("org");
 const userCreated = ref<boolean>(false);
@@ -168,10 +203,6 @@ const switchVisibility = () => {
   }
 };
 
-const emailMatch = () => {
-  return email.value === email2.value || "Emails não são iguais";
-};
-
 const submit = async () => {
   // won't really happen, but keeps linter happy
   if (!form.value) {
@@ -182,6 +213,7 @@ const submit = async () => {
     return;
   }
 
+  errors.value = {};
   submitting.value = true;
 
   try {
