@@ -170,7 +170,7 @@ import {
   isValidPassword,
   match,
 } from "src/utils/validators";
-import { AxiosError } from "src/exceptions";
+import { useFormErrors } from "src/composables/formErrors";
 
 const email = ref<string>("");
 const email2 = ref<string>("");
@@ -179,7 +179,8 @@ const password2 = ref<string>("");
 const name = ref<string>("");
 const type = ref<UserType>("org");
 const userCreated = ref<boolean>(false);
-const errors = ref<{ [key: string]: string }>({});
+
+const { errors, handleErrors, clearErrors } = useFormErrors();
 
 const form = ref<QForm>();
 const userTypes = ref([
@@ -205,39 +206,22 @@ const switchVisibility = () => {
 };
 
 const submit = async () => {
-  // won't really happen, but keeps linter happy
-  if (!form.value) {
+  clearErrors();
+
+  if (!(await form.value?.validate())) {
     return;
   }
 
-  if (!(await form.value.validate())) {
-    return;
-  }
-
-  errors.value = {};
   submitting.value = true;
 
-  try {
-    await register({
-      email: email.value,
-      password: password.value,
-      name: name.value,
-      type: type.value,
-    });
-    userCreated.value = true;
-  } catch (err) {
-    if (err instanceof AxiosError) {
-      if (err.status === 422) {
-        // show form errors
-        for (const [field, error] of Object.entries(err.data.errors)) {
-          errors.value[field] = error;
-        }
-
-        return;
-      }
-    }
-  } finally {
-    submitting.value = false;
-  }
+  register({
+    email: email.value,
+    password: password.value,
+    name: name.value,
+    type: type.value,
+  })
+    .then(() => (userCreated.value = true))
+    .catch(handleErrors)
+    .finally(() => (submitting.value = false));
 };
 </script>
