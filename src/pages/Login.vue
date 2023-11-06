@@ -12,6 +12,7 @@
           no-reset-focus
           ref="form"
           class="q-px-sm q-pt-sm"
+          @keydown.enter="submit"
         >
           <q-input
             v-model="email"
@@ -20,6 +21,8 @@
             type="email"
             label="Email"
             :rules="[required, isEmail]"
+            :error="!!errors.email"
+            :error-message="errors.email"
           >
             <template v-slot:prepend>
               <q-icon name="email" />
@@ -37,6 +40,8 @@
             spellcheck="false"
             :type="passwordFieldType"
             :rules="[required, isValidPassword]"
+            :error="!!errors.password"
+            :error-message="errors.password"
           >
             <template v-slot:prepend>
               <q-icon name="lock" />
@@ -85,7 +90,9 @@
 import { QInputProps, QForm } from "quasar";
 import { ref } from "vue";
 
+import { login } from "src/services/user.service";
 import { required, isEmail, isValidPassword } from "src/utils/validators";
+import { useFormErrors } from "src/composables/formErrors";
 
 const email = ref<string>("");
 const password = ref<string>("");
@@ -95,6 +102,8 @@ const passwordFieldType = ref<QInputProps["type"]>("password");
 const visibility = ref<boolean>(false);
 const visibilityIcon = ref<"visibility" | "visibility_off">("visibility");
 const submitting = ref<boolean>(false);
+
+const { errors, handleErrors, clearErrors } = useFormErrors();
 
 // form controls
 const switchVisibility = () => {
@@ -119,9 +128,14 @@ const submit = async () => {
     return;
   }
 
+  clearErrors();
   submitting.value = true;
-  setTimeout(() => {
-    submitting.value = false;
-  }, 2000);
+
+  login(email.value, password.value)
+    .then(() => {})
+    .catch((errs) => {
+      handleErrors(errs);
+      submitting.value = false;
+    });
 };
 </script>
