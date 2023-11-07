@@ -1,5 +1,6 @@
 import { boot } from "quasar/wrappers";
 import Axios, { AxiosInstance, AxiosStatic } from "axios";
+import { Notify } from "quasar";
 
 import { version } from "../../package.json";
 import { AxiosError } from "src/exceptions";
@@ -58,6 +59,13 @@ export default boot(({ app }) => {
         // todo: handle this case
         console.error("no permissions");
         return;
+      }
+
+      if (status === 500) {
+        Notify.create({
+          type: "negative",
+          message: "Algo correu mal do nosso lado. \nTente mais tarde",
+        });
       }
 
       return Promise.reject(new AxiosError(data.reason, status, data.errors));

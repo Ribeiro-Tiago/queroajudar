@@ -105,7 +105,12 @@ module.exports = configure(function () {
       // directives: [],
 
       // Quasar plugins
-      plugins: [],
+      plugins: ["Notify"],
+      config: {
+        notify: {
+          position: "top-right",
+        },
+      },
     },
 
     // animations: 'all', // --- includes all animations
