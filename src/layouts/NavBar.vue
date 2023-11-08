@@ -21,7 +21,7 @@
 
           <q-item clickable v-close-popup @click="logout">
             <q-item-section>
-              <q-item-label>Logout</q-item-label>
+              <q-item-label>Sair</q-item-label>
             </q-item-section>
 
             <q-item-section avatar>
@@ -43,7 +43,7 @@ const { user, logout } = useSessionStore();
 </script>
 
 <style scoped>
-a {
+.q-toolbar__title a {
   text-decoration: none;
   color: #fff;
 }
