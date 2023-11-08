@@ -29,7 +29,7 @@ export default boot(({ app }) => {
   // request
   axios.interceptors.request.use((req) => {
     // attach token to requests
-    req.headers.Authorization = token;
+    req.headers.authorization = token;
 
     req.headers["X-Version"] = version;
 
