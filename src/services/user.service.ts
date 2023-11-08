@@ -10,4 +10,8 @@ export const register = async (payload: RegisterPayload) => {
   return await axios.post<User>("register", payload);
 };
 
+export const resetPassword = async (email: string) => {
+  return axios.post("resetPassword", email);
+};
+
 export const logout = async () => await func("logout")();
