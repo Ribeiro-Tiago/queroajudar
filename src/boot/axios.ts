@@ -23,11 +23,13 @@ const axios = Axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
+let token: string | null = localStorage.getItem("token");
+
 export default boot(({ app }) => {
   // request
   axios.interceptors.request.use((req) => {
     // attach token to requests
-    // req.headers.Authorization = `Bearer ${Vue.prototype.$keycloak.token}`;
+    req.headers.Authorization = token;
 
     req.headers["X-Version"] = version;
 
@@ -36,7 +38,15 @@ export default boot(({ app }) => {
 
   // response
   axios.interceptors.response.use(
-    ({ data }) => data,
+    ({ data, config }) => {
+      if (config.url === "login") {
+        token = data.token as string;
+        localStorage.setItem("token", token);
+        return data.user;
+      }
+
+      return data;
+    },
     async (error) => {
       if (process.env.NODE_ENV === "local") {
         console.log(error, error.response);

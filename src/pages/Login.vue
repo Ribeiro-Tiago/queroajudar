@@ -89,10 +89,12 @@
 <script setup lang="ts">
 import { QInputProps, QForm } from "quasar";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 import { login } from "src/services/user.service";
 import { required, isEmail, isValidPassword } from "src/utils/validators";
 import { useFormErrors } from "src/composables/formErrors";
+import { useSessionStore } from "src/stores/session";
 
 const email = ref<string>("");
 const password = ref<string>("");
@@ -104,6 +106,9 @@ const visibilityIcon = ref<"visibility" | "visibility_off">("visibility");
 const submitting = ref<boolean>(false);
 
 const { errors, handleErrors, clearErrors } = useFormErrors();
+
+const router = useRouter();
+const userStore = useSessionStore();
 
 // form controls
 const switchVisibility = () => {
@@ -132,7 +137,10 @@ const submit = async () => {
   submitting.value = true;
 
   login(email.value, password.value)
-    .then(() => {})
+    .then((user) => {
+      userStore.setUser(user);
+      router.replace("/");
+    })
     .catch((errs) => {
       handleErrors(errs);
       submitting.value = false;

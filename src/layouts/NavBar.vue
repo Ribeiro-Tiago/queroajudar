@@ -1,5 +1,5 @@
 <template>
-  <q-header elevated>
+  <q-header elevated class="bg-primary">
     <q-toolbar>
       <q-toolbar-title class="cursor-pointer" @click="onHomeClick">
         Quero Ajudar
@@ -11,17 +11,28 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 
-const isAuthenticated = ref(false);
-const accountText = computed(() => {
-  return isAuthenticated.value ? "Conta" : "Iniciar sessão";
-});
+import { useSessionStore } from "src/stores/session";
+
+const accountText = ref("Iniciar Sessão");
 const router = useRouter();
+const userStore = useSessionStore();
+
+let authenticated = false;
+
+userStore.$subscribe(
+  (_, store) => {
+    authenticated = !!store._user;
+
+    accountText.value = "Conta";
+  },
+  { immediate: true }
+);
 
 const onAccountClick = () => {
-  if (isAuthenticated.value) {
+  if (authenticated) {
     router.push("account");
   } else {
     router.push("login");
