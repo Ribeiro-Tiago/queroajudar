@@ -8,3 +8,5 @@ export const login = async (email: string, password: string) => {
 export const register = async (payload: RegisterPayload) => {
   return await axios.post<User>("register", payload);
 };
+
+export const logout = async () => await axios.delete("logout");
