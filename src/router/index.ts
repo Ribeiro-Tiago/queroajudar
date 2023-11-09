@@ -1,12 +1,62 @@
-import { route } from "quasar/wrappers";
-import {
-  createMemoryHistory,
-  createRouter,
-  createWebHashHistory,
-  createWebHistory,
-} from "vue-router";
+import { Notify } from "quasar";
+import { RouteRecordRaw } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 
-import routes from "./routes";
+const routes: RouteRecordRaw[] = [
+  {
+    path: "/",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [
+      {
+        path: "",
+        component: () => import("src/pages/Posts.vue"),
+      },
+      {
+        name: "login",
+        path: "/login",
+        component: () => import("src/pages/Login.vue"),
+        meta: {
+          allowedAuthed: false,
+          title: "Iniciar sessão",
+        },
+      },
+      {
+        name: "reset",
+        path: "/reset",
+        component: () => import("src/pages/ResetPassword.vue"),
+        meta: {
+          allowedAuthed: false,
+          title: "Repôr palavra-passe",
+        },
+      },
+      {
+        name: "register",
+        path: "/register",
+        component: () => import("src/pages/Register.vue"),
+        meta: {
+          allowedAuthed: false,
+          title: "Registar",
+        },
+      },
+      {
+        name: "createPost",
+        path: "/post",
+        component: () => import("src/pages/Register.vue"),
+        meta: {
+          requireAuth: true,
+          title: "Nova publicação",
+        },
+      },
+    ],
+  },
+
+  // Always leave this as last one,
+  // but you can also remove it
+  {
+    path: "/:catchAll(.*)*",
+    component: () => import("pages/ErrorNotFound.vue"),
+  },
+];
 
 /*
  * If not building with SSR mode, you can
@@ -16,23 +66,35 @@ import routes from "./routes";
  * async/await or return a Promise which resolves
  * with the Router instance.
  */
-
-export default route(function (/* { store, ssrContext } */) {
-  const createHistory = process.env.SERVER
-    ? createMemoryHistory
-    : process.env.VUE_ROUTER_MODE === "history"
-    ? createWebHistory
-    : createWebHashHistory;
-
-  const Router = createRouter({
-    scrollBehavior: () => ({ left: 0, top: 0 }),
-    routes,
-
-    // Leave this as is and make changes in quasar.conf.js instead!
-    // quasar.conf.js -> build -> vueRouterMode
-    // quasar.conf.js -> build -> publicPath
-    history: createHistory(process.env.VUE_ROUTER_BASE),
-  });
-
-  return Router;
+const Router = createRouter({
+  scrollBehavior: () => ({ left: 0, top: 0 }),
+  routes,
+  history: createWebHistory(process.env.VUE_ROUTER_BASE),
 });
+
+Router.beforeEach((to, _, next) => {
+  if (to.meta) {
+    // trying to access routes that don't need auth (e.g: login, register)
+    // while logged while, should not be possible
+    if (to.meta.allowedAuthed === false && !!localStorage.getItem("token")) {
+      return next("/");
+    }
+
+    // trying to access routes that need login without being logged in is not possible
+    if (to.meta.requireAuth && !localStorage.getItem("token")) {
+      Notify.create({
+        type: "warning",
+        message: "Precisa de iniciar sessão primeiro",
+      });
+      return next("login");
+    }
+  }
+
+  document.title = `Quero Ajudar - ${
+    to.meta.title ? `- ${to.meta.title}` : ""
+  }`;
+
+  next();
+});
+
+export default Router;

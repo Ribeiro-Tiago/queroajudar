@@ -56,7 +56,6 @@ module.exports = configure(function () {
         node: "node16",
       },
 
-      vueRouterMode: "history", // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,
