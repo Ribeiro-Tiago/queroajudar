@@ -1,12 +1,45 @@
 <template>
-  <q-page class="row items-center justify-evenly">Home page</q-page>
+  <q-page class="items-center justify-evenly">
+    <qa-filter />
+
+    <q-virtual-scroll
+      v-slot="{ item }"
+      style="max-height: 400px"
+      separator
+      :items="store.posts"
+    >
+      <qa-post :post="item" />
+    </q-virtual-scroll>
+
+    <q-pagination
+      v-model="page"
+      max="5"
+      direction-links
+      boundary-numbers
+      flat
+      color="grey"
+      active-color="primary"
+    />
+  </q-page>
 </template>
 
 <script setup lang="ts">
-// import {} from 'components/models';
-// import { ref } from 'vue';
+import { onBeforeMount, ref } from "vue";
 
-// const meta = ref<Meta>({
-//   totalCount: 1200,
-// });
+import QaFilter from "src/components/QaFilter.vue";
+import QaPost from "src/components/QaPost.vue";
+import { usePostsStore } from "src/stores/posts";
+
+const page = ref(0);
+const store = usePostsStore();
+
+onBeforeMount(() => store.getPosts());
 </script>
+
+<style scoped>
+.q-page {
+  width: 60vw;
+  display: block;
+  margin: auto;
+}
+</style>
