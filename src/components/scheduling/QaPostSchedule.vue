@@ -15,9 +15,7 @@
   </div>
 
   <div v-show="scheduleType === 'specific'" class="q-mx-auto text-center">
-    <qa-post-schedule-specific-selctor />
-
-    <q-date v-model:model-value="date" />
+    <qa-post-schedule-specific-selector />
   </div>
 </template>
 
@@ -26,13 +24,13 @@ import { ref } from "vue";
 import { QForm, QSelect } from "quasar";
 
 import QaPostScheduleRecurringSelector from "./QaPostScheduleRecurringSelector.vue";
+import QaPostScheduleSpecificSelector from "./QaPostScheduleSpecificSelector.vue";
 import { required } from "src/utils/validators";
 import { useFormErrors } from "src/composables/formErrors";
 import { SelectOption } from "src/types/form";
 import { RecurringSchedule, SelectedDays } from "src/components/models";
 
 const scheduleType = ref();
-const date = ref();
 const recurringDays = ref<RecurringSchedule | undefined>(undefined);
 const scheduleOptions = ref<SelectOption[]>([
   {

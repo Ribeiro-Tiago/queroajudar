@@ -1,6 +1,6 @@
-export const required = (val: string) => {
-  return val?.length > 0 || "Campo obrigatório";
-};
+import dayjs from "src/services/dayjs.service";
+
+export const required = (val: string) => val?.length > 0 || "Campo obrigatório";
 
 export const isEmail = (val: string) => {
   const emailPattern =
@@ -19,4 +19,30 @@ export const isValidPassword = (val: string) => {
 
 export const match = (valToMatch: string, key: string) => (val: string) => {
   return valToMatch === val || `${key} não são iguais`;
+};
+
+export const validDate = (val: string) => {
+  const toValidate = dayjs(val, "DD/MM/YYYY");
+
+  if (!toValidate.isValid()) {
+    return "Não é uma data válida";
+  }
+
+  const today = dayjs();
+
+  if (
+    // if previous year(s)
+    toValidate.year() < today.year() ||
+    // if it's same year, but previous month
+    (toValidate.year() === today.year() &&
+      toValidate.month() < today.month()) ||
+    // if it's same year and month, but previous day
+    (toValidate.year() === today.year() &&
+      toValidate.month() === today.month() &&
+      toValidate.day() < today.day())
+  ) {
+    return "Data não pode ser inferior a hoje";
+  }
+
+  return true;
 };

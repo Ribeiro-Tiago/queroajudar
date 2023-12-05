@@ -1,5 +1,7 @@
 import { v1 as uuid } from "uuid";
 
+import { HumanDay } from "src/types/form";
+
 export const getNewGroupTimes = () => {
   const d = new Date();
   const closestHour = d.getHours() + Math.round(d.getMinutes() / 60);
@@ -13,4 +15,16 @@ export const getNewGroupTimes = () => {
     start: `${closestHour.toString().padStart(2, "0")}:00`,
     end: `${(closestHour + 1).toString().padStart(2, "0")}:00`,
   };
+};
+
+export const toHumanDay = (day: string): HumanDay => {
+  return {
+    monday: "Segunda-feira",
+    tuesday: "Terça-feira",
+    wednesday: "Quarta-feira",
+    thursday: "Quinta-feira",
+    friday: "Sexta-feira",
+    saturday: "Sábado",
+    sunday: "Domingo",
+  }[day] as HumanDay;
 };

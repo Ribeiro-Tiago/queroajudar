@@ -63,18 +63,18 @@
 import { ref } from "vue";
 
 import QaTimePicker from "./QaTimePicker.vue";
-import { RecurringScheduleTime } from "src/components/models";
+import { ScheduleTime } from "src/components/models";
 import { getNewGroupTimes } from "src/utils/scheduling";
 
 const props = defineProps({
-  modelValue: { type: Array<RecurringScheduleTime>, required: true },
+  modelValue: { type: Array<ScheduleTime>, required: true },
 });
 
 const $emit = defineEmits<{
-  (e: "update:model-value", payload: RecurringScheduleTime[]): void;
+  (e: "update:model-value", payload: ScheduleTime[]): void;
 }>();
 
-const times = ref<RecurringScheduleTime[]>(props.modelValue);
+const times = ref<ScheduleTime[]>(props.modelValue);
 
 const onAdd = () => {
   times.value = [...times.value, getNewGroupTimes()];
@@ -87,11 +87,7 @@ const onRemove = (id: string) => {
   $emit("update:model-value", times.value);
 };
 
-const onChange = (
-  val: string,
-  field: "start" | "end",
-  item: RecurringScheduleTime
-) => {
+const onChange = (val: string, field: "start" | "end", item: ScheduleTime) => {
   const validateTime = (
     [hour1, minute1]: number[],
     [hour2, minute2]: number[]

@@ -1,3 +1,5 @@
+import { Dayjs } from "dayjs";
+
 export type Day =
   | "monday"
   | "tuesday"
@@ -17,7 +19,7 @@ export interface SelectedDays {
   sunday?: Array<{ start: Date; end: Date }>;
 }
 
-export interface RecurringScheduleTime {
+export interface ScheduleTime {
   id: string;
   start: string;
   end: string;
@@ -26,7 +28,12 @@ export interface RecurringScheduleTime {
 
 export interface RecurringScheduleTimeGroup {
   day: Day;
-  times: RecurringScheduleTime[];
+  times: ScheduleTime[];
 }
 
-export type RecurringSchedule = Record<Day, RecurringScheduleTime[] | null>;
+export type RecurringSchedule = Record<Day, ScheduleTime[] | null>;
+
+export interface SpecificSchedule {
+  day: Dayjs;
+  times: ScheduleTime[];
+}

@@ -131,11 +131,12 @@ import { PropType, ref } from "vue";
 import {
   Day,
   RecurringSchedule,
-  RecurringScheduleTime,
+  ScheduleTime,
   RecurringScheduleTimeGroup,
 } from "src/components/models";
 import QaPostScheduleRecurringTime from "./QaPostScheduleRecurringTime.vue";
 import { getNewGroupTimes } from "src/utils/scheduling";
+import { toHumanDay } from "src/utils/scheduling";
 
 const $emit = defineEmits<{
   (e: "update:model-value", payload: RecurringSchedule): void;
@@ -182,30 +183,9 @@ const toggleDay = (day: Day) => {
   $emit("update:model-value", updated);
 };
 
-const onTimesUpdate = (day: Day, newTimes: RecurringScheduleTime[]) => {
+const onTimesUpdate = (day: Day, newTimes: ScheduleTime[]) => {
   selected.value[day] = newTimes;
   $emit("update:model-value", selected.value);
-};
-
-type HumanDay =
-  | "Segunda-feira"
-  | "Terça-feira"
-  | "Quarta-feira"
-  | "Quinta-feira"
-  | "Sexta-feira"
-  | "Sábado"
-  | "Domingo";
-
-const toHumanDay = (day: string): HumanDay => {
-  return {
-    monday: "Segunda-feira",
-    tuesday: "Terça-feira",
-    wednesday: "Quarta-feira",
-    thursday: "Quinta-feira",
-    friday: "Sexta-feira",
-    saturday: "Sábado",
-    sunday: "Domingo",
-  }[day] as HumanDay;
 };
 </script>
 

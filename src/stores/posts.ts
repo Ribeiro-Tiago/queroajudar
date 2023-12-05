@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import dayjs from "dayjs";
 
+import dayjs from "src/services/dayjs.service";
 import { Post } from "src/types/post";
 import { getPosts } from "src/services/posts.service";
 
