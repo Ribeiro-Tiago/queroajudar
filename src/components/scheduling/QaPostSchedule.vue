@@ -14,59 +14,33 @@
     />
   </div>
 
-  <!-- <q-select
-    v-if="scheduleType === 'specific'"
-    v-model="scheduleInput"
-    multiple
-    options-dense
-    use-chips
-    hide-hint
-    label="Que ajuda precisa"
-    :rules="[required]"
-    :error="!!errors.category"
-    :error-message="errors.category"
-    :options="helpOptions"
-  >
-    <template v-slot:prepend>
-      <q-icon name="support" />
-    </template>
+  <div v-show="scheduleType === 'specific'" class="q-mx-auto text-center">
+    <qa-post-schedule-specific-selctor />
 
-    <template v-slot:selected-item="{ opt }">
-      <qa-post-tag
-        :key="opt.value"
-        :tag="opt.value"
-        removable
-        @click:remove="removeCategory(opt.value)"
-      />
-    </template>
-  </q-select> -->
-
-  <q-date
-    v-if="scheduleType === 'specific'"
-    v-model:model-value="date"
-  ></q-date>
+    <q-date v-model:model-value="date" />
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
 import { QForm, QSelect } from "quasar";
 
-import { required } from "src/utils/validators";
 import QaPostScheduleRecurringSelector from "./QaPostScheduleRecurringSelector.vue";
+import { required } from "src/utils/validators";
 import { useFormErrors } from "src/composables/formErrors";
 import { SelectOption } from "src/types/form";
-import { RecurringSchedule, SelectedDays } from "./models";
+import { RecurringSchedule, SelectedDays } from "src/components/models";
 
 const scheduleType = ref();
 const date = ref();
 const recurringDays = ref<RecurringSchedule | undefined>(undefined);
 const scheduleOptions = ref<SelectOption[]>([
   {
-    label: "Qualquer dia / hora",
+    label: "Qualquer altura",
     value: "anytime",
   },
   {
-    label: "Dia / hora especifica",
+    label: "Dia e hora especifica",
     value: "specific",
   },
   {

@@ -166,7 +166,7 @@ import { useFormErrors } from "src/composables/formErrors";
 import { usePostsStore } from "src/stores/posts";
 import { getCities } from "src/services/geoapify.service";
 import QaPostTag from "./QaPostTag.vue";
-import QaPostSchedule from "./QaPostSchedule.vue";
+import QaPostSchedule from "./scheduling/QaPostSchedule.vue";
 import { SelectOption } from "src/types/form";
 
 const title = ref<string>("");

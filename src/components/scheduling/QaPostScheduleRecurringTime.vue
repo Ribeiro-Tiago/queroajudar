@@ -63,7 +63,7 @@
 import { ref } from "vue";
 
 import QaTimePicker from "./QaTimePicker.vue";
-import { RecurringScheduleTime } from "./models";
+import { RecurringScheduleTime } from "src/components/models";
 import { getNewGroupTimes } from "src/utils/scheduling";
 
 const props = defineProps({
