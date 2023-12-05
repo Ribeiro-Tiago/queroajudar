@@ -114,7 +114,8 @@ module.exports = configure(function () {
 
     // animations: 'all', // --- includes all animations
     // https://v2.quasar.dev/options/animations
-    animations: [],
+    // TODO: meter só as que forem usadas
+    animations: "all",
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#sourcefiles
     // sourceFiles: {

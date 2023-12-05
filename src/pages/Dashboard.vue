@@ -1,5 +1,7 @@
 <template>
   <q-page class="items-center justify-evenly">
+    <q-btn @click="store.openDialog">criar</q-btn>
+
     <qa-filter />
 
     <q-virtual-scroll
@@ -21,6 +23,8 @@
       active-color="primary"
     />
   </q-page>
+
+  <qa-post-dialog v-if="store.dialogRendered" />
 </template>
 
 <script setup lang="ts">
@@ -28,6 +32,7 @@ import { onBeforeMount, ref } from "vue";
 
 import QaFilter from "src/components/QaFilter.vue";
 import QaPost from "src/components/QaPost.vue";
+import QaPostDialog from "src/components/QaPostDialog.vue";
 import { usePostsStore } from "src/stores/posts";
 
 const page = ref(0);

@@ -9,7 +9,7 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: "",
-        component: () => import("src/pages/Posts.vue"),
+        component: () => import("src/pages/Dashboard.vue"),
       },
       {
         name: "login",
@@ -40,11 +40,12 @@ const routes: RouteRecordRaw[] = [
       },
       {
         name: "createPost",
-        path: "/post",
-        component: () => import("src/pages/Register.vue"),
+        path: "/posts",
+        component: () => import("src/components/PostForm.vue"),
         meta: {
           requireAuth: true,
           title: "Nova publicação",
+          new: true,
         },
       },
     ],

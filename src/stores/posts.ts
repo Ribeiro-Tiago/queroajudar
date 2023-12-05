@@ -7,6 +7,8 @@ import { getPosts } from "src/services/posts.service";
 interface postState {
   _posts: Post[];
   _loading: boolean;
+  _dialogVisible: boolean;
+  _dialogRendered: boolean;
 }
 
 const formatDate = (date: number) => {
@@ -17,10 +19,14 @@ export const usePostsStore = defineStore("posts", {
   state: (): postState => ({
     _posts: [],
     _loading: true,
+    _dialogVisible: true,
+    _dialogRendered: false,
   }),
   getters: {
     posts: (state) => state._posts,
     loading: (state) => state._loading,
+    dialogVisible: (state) => state._dialogVisible,
+    dialogRendered: (state) => state._dialogRendered,
   },
   actions: {
     async getPosts() {
@@ -34,6 +40,18 @@ export const usePostsStore = defineStore("posts", {
         })
         .catch((err) => console.log(err))
         .finally(() => (this._loading = false));
+    },
+
+    openDialog() {
+      if (!this.dialogRendered) {
+        this._dialogRendered = true;
+      } else {
+        this._dialogVisible = true;
+      }
+    },
+
+    closeDialog() {
+      this._dialogVisible = false;
     },
   },
 });
