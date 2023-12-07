@@ -109,10 +109,9 @@ import { required, validDate } from "src/utils/validators";
 import QaPostScheduleRecurringTime from "./QaPostScheduleRecurringTime.vue";
 import { ScheduleTime, SpecificSchedule } from "../models";
 import { getNewGroupTimes } from "src/utils/scheduling";
+import { usePostsStore } from "src/stores/posts";
 
-const $emit = defineEmits<{
-  (e: "update:model-value", payload: SpecificSchedule): void;
-}>();
+const $store = usePostsStore();
 
 const date = ref("");
 const proxyDate = ref("");
@@ -133,7 +132,7 @@ const onSave = () => {
 
   if (!times.value.length) {
     times.value = [getNewGroupTimes()];
-    $emit("update:model-value", {
+    onUpdate({
       day: dayjs(date.value, "DD/MM/YYYY"),
       times: times.value,
     });
@@ -142,10 +141,15 @@ const onSave = () => {
 
 const onTimesUpdate = (payload: ScheduleTime[]) => {
   times.value = payload;
-  $emit("update:model-value", {
+
+  onUpdate({
     day: dayjs(date.value, "DD/MM/YYYY"),
     times: payload,
   });
+};
+
+const onUpdate = (payload: SpecificSchedule) => {
+  $store.updatePost("schedule", { type: "recurring", payload });
 };
 </script>
 

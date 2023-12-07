@@ -9,16 +9,6 @@ export type Day =
   | "saturday"
   | "sunday";
 
-export interface SelectedDays {
-  monday?: Array<{ start: Date; end: Date }>;
-  tuesday?: Array<{ start: Date; end: Date }>;
-  wednesday?: Array<{ start: Date; end: Date }>;
-  thursday?: Array<{ start: Date; end: Date }>;
-  friday?: Array<{ start: Date; end: Date }>;
-  saturday?: Array<{ start: Date; end: Date }>;
-  sunday?: Array<{ start: Date; end: Date }>;
-}
-
 export interface ScheduleTime {
   id: string;
   start: string;
@@ -37,3 +27,5 @@ export interface SpecificSchedule {
   day: Dayjs;
   times: ScheduleTime[];
 }
+
+export type ScheduleType = "anytime" | "specific" | "recurring";

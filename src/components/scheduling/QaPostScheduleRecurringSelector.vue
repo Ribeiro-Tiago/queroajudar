@@ -126,7 +126,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref } from "vue";
+import { PropType, onBeforeMount, ref } from "vue";
 
 import {
   Day,
@@ -137,16 +137,15 @@ import {
 import QaPostScheduleRecurringTime from "./QaPostScheduleRecurringTime.vue";
 import { getNewGroupTimes } from "src/utils/scheduling";
 import { toHumanDay } from "src/utils/scheduling";
+import { usePostsStore } from "src/stores/posts";
 
-const $emit = defineEmits<{
-  (e: "update:model-value", payload: RecurringSchedule): void;
-}>();
+// setup
 
 const props = defineProps({
   modelValue: {
     type: Object as PropType<RecurringSchedule>,
     default: () => ({
-      monday: null,
+      monday: [getNewGroupTimes()],
       tuesday: null,
       wednesday: null,
       thursday: null,
@@ -157,9 +156,17 @@ const props = defineProps({
   },
 });
 
+const $store = usePostsStore();
+
+// data
 const selected = ref<RecurringSchedule>(props.modelValue);
 
-const timeGroups = ref<RecurringScheduleTimeGroup[]>([]);
+const timeGroups = ref<RecurringScheduleTimeGroup[]>();
+
+// hooks
+onBeforeMount(() => setupTimeGroups(selected.value));
+
+// methods
 
 const toggleDay = (day: Day) => {
   const updated = { ...selected.value };
@@ -170,6 +177,19 @@ const toggleDay = (day: Day) => {
     updated[day] = null;
   }
 
+  setupTimeGroups(updated);
+
+  selected.value = updated;
+
+  onUpdate(updated);
+};
+
+const onTimesUpdate = (day: Day, newTimes: ScheduleTime[]) => {
+  selected.value[day] = newTimes;
+  onUpdate(selected.value);
+};
+
+const setupTimeGroups = (updated: RecurringSchedule) => {
   timeGroups.value = Object.entries(updated).reduce((result, [key, times]) => {
     if (times) {
       result.push({ day: key as Day, times });
@@ -177,15 +197,15 @@ const toggleDay = (day: Day) => {
 
     return result;
   }, [] as RecurringScheduleTimeGroup[]);
-
-  selected.value = updated;
-
-  $emit("update:model-value", updated);
 };
 
-const onTimesUpdate = (day: Day, newTimes: ScheduleTime[]) => {
-  selected.value[day] = newTimes;
-  $emit("update:model-value", selected.value);
+const onUpdate = (payload: RecurringSchedule) => {
+  $store.updatePost("schedule", {
+    type: "recurring",
+    payload: Object.fromEntries(
+      Object.entries(payload).filter(([_, value]) => value !== null)
+    ) as RecurringSchedule,
+  });
 };
 </script>
 

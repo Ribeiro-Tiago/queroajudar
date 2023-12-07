@@ -1,8 +1,7 @@
 <template>
   <q-dialog
-    full-height
-    :model-value="store.dialogVisible"
-    @update:model-value="store.closeDialog()"
+    :model-value="$store.dialogVisible"
+    @update:model-value="$store.closeDialog()"
   >
     <q-card square class="q-pb-md" style="width: 90vw">
       <q-card-section class="bg-primary">
@@ -29,6 +28,7 @@
             :rules="[required]"
             :error="!!errors.title"
             :error-message="errors.title"
+            @update:model-value="$store.updatePost('title', title)"
           >
             <template v-slot:prepend>
               <q-icon name="title" />
@@ -47,6 +47,7 @@
             :rules="[required]"
             :error="!!errors.description"
             :error-message="errors.description"
+            @update:model-value="$store.updatePost('description', description)"
           >
             <template v-slot:prepend>
               <q-icon name="description" />
@@ -69,6 +70,7 @@
             :options="locations"
             :loading="fetchingLocations"
             @filter="fetchLocations"
+            @update:model-value="onLocationUpdate"
           >
             <template v-slot:prepend>
               <q-icon name="map" />
@@ -113,6 +115,7 @@
             :error="!!errors.category"
             :error-message="errors.category"
             :options="helpOptions"
+            @update:model-value="onCategoryUpdate"
           >
             <template v-slot:prepend>
               <q-icon name="support" />
@@ -150,7 +153,7 @@
           flat
           label="Cancelar"
           :disable="submitting"
-          @click="store.closeDialog()"
+          @click="$store.closeDialog()"
         />
       </q-card-actions>
     </q-card>
@@ -188,7 +191,7 @@ const submitting = ref<boolean>(false);
 
 const { errors, hasErrors, handleErrors, clearErrors } = useFormErrors();
 
-const store = usePostsStore();
+const $store = usePostsStore();
 
 const fetchLocations = async (
   text: string,
@@ -219,12 +222,26 @@ const fetchLocations = async (
 
 const onRemoveLocation = (location: string) => {
   locationInput.value = locationInput.value.filter((l) => l !== location);
+  onLocationUpdate();
+};
+
+const onLocationUpdate = () => {
+  $store.updatePost("locations", locationInput.value);
 };
 
 const removeCategory = (category: string) => {
   categoryInput.value = categoryInput.value.filter(({ value }) => {
     return category !== value;
   });
+
+  onCategoryUpdate();
+};
+
+const onCategoryUpdate = () => {
+  $store.updatePost(
+    "categories",
+    categoryInput.value.map(({ value }) => value)
+  );
 };
 
 const submit = async () => {
@@ -233,6 +250,8 @@ const submit = async () => {
     return;
   }
 
+  form.value.greedy = true;
+
   if (!(await form.value.validate())) {
     return;
   }
@@ -240,12 +259,11 @@ const submit = async () => {
   clearErrors();
   submitting.value = true;
 
-  // login(email.value, password.value)
-  //   .then(() => store.closeDialog())
-  //   .catch((errs) => {
-  //     handleErrors(errs);
-  //     submitting.value = false;
-  //   });
+  $store
+    .createPost()
+    .then(() => $store.closeDialog())
+    .catch(handleErrors)
+    .finally(() => (submitting.value = false));
 };
 </script>
 
