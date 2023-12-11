@@ -91,9 +91,7 @@ Router.beforeEach((to, _, next) => {
     }
   }
 
-  document.title = `Quero Ajudar - ${
-    to.meta.title ? `- ${to.meta.title}` : ""
-  }`;
+  document.title = `Quero Ajudar ${to.meta.title ? `- ${to.meta.title}` : ""}`;
 
   next();
 });
