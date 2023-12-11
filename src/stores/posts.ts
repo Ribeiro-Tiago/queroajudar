@@ -40,7 +40,7 @@ export const usePostsStore = defineStore("posts", {
       this.loading = true;
 
       try {
-        const posts = await getPosts();
+        const posts = (await getPosts()) || [];
 
         this.posts = posts.map((p) => ({
           ...p,
