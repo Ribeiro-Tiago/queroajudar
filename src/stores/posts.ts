@@ -1,27 +1,26 @@
 import { defineStore } from "pinia";
 
 import dayjs from "src/services/dayjs.service";
-import { Post, PostSchedule } from "src/types/post";
-import { getPosts } from "src/services/posts.service";
-
-interface EmptyPost {
-  schedule: PostSchedule;
-  id?: string;
-  description?: string;
-  title?: string;
-  tags?: string[];
-  locations?: string[];
-}
+import { EmptyPost, Post, PostSchedule } from "src/types/post";
+import { getPosts, addPost } from "src/services/posts.service";
+import { Errors, ValidationError } from "src/exceptions";
 
 interface PostState {
-  _post: Post | EmptyPost;
-  _posts: Post[];
-  _loading: boolean;
-  _dialogVisible: boolean;
-  _dialogRendered: boolean;
+  post: Post | EmptyPost;
+  posts: Post[];
+  loading: boolean;
+  dialogVisible: boolean;
+  dialogRendered: boolean;
+  formErrors: Errors;
 }
 
-const DEFAULT_POST: EmptyPost = { schedule: { type: "anytime" } };
+const DEFAULT_POST: EmptyPost = {
+  title: "",
+  tags: [],
+  locations: [],
+  description: "",
+  schedule: { type: "anytime" },
+};
 
 const formatDate = (date: number) => {
   return dayjs(date).format("hh:mm DD/MM/YYYY");
@@ -29,26 +28,21 @@ const formatDate = (date: number) => {
 
 export const usePostsStore = defineStore("posts", {
   state: (): PostState => ({
-    _posts: [],
-    _post: { ...DEFAULT_POST },
-    _loading: true,
-    _dialogVisible: true,
-    _dialogRendered: false,
+    posts: [],
+    post: { ...DEFAULT_POST },
+    loading: true,
+    dialogVisible: true,
+    dialogRendered: false,
+    formErrors: {},
   }),
-  getters: {
-    posts: (state) => state._posts,
-    loading: (state) => state._loading,
-    dialogVisible: (state) => state._dialogVisible,
-    dialogRendered: (state) => state._dialogRendered,
-  },
   actions: {
     async getPosts() {
-      this._loading = true;
+      this.loading = true;
 
       try {
         const posts = await getPosts();
 
-        this._posts = posts.map((p) => ({
+        this.posts = posts.map((p) => ({
           ...p,
           // created_at: formatDate(p.created_at.seconds),
         }));
@@ -56,31 +50,42 @@ export const usePostsStore = defineStore("posts", {
         console.log(err);
       }
 
-      this._loading = false;
+      this.loading = false;
     },
 
     updatePost(prop: string, val: string | string[] | PostSchedule) {
-      this._post = { ...this._post, [prop]: val };
+      this.post = { ...this.post, [prop]: val };
     },
 
-    setPost(post: Post) {
-      this._post = post || { ...DEFAULT_POST };
+    setPost(post?: Post) {
+      this.post = post || { ...DEFAULT_POST };
     },
 
     async createPost() {
-      // await addPost(this._post);
+      try {
+        const res = await addPost(this.post as EmptyPost);
+        console.log(res);
+        // this.closeDialog();
+      } catch (err) {
+        if (err instanceof ValidationError) {
+          this.formErrors = err.toError();
+        }
+
+        console.log(err);
+      }
     },
 
     openDialog() {
-      if (!this._dialogRendered) {
-        this._dialogRendered = true;
+      if (!this.dialogRendered) {
+        this.dialogRendered = true;
       } else {
-        this._dialogVisible = true;
+        this.setPost();
+        this.dialogVisible = true;
       }
     },
 
     closeDialog() {
-      this._dialogVisible = false;
+      this.dialogVisible = false;
     },
   },
 });

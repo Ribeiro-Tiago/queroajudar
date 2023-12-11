@@ -9,13 +9,16 @@ export interface PostSchedule {
   payload?: RecurringSchedule | SpecificSchedule;
 }
 
-export interface Post {
-  id: string;
+export interface EmptyPost {
+  schedule: PostSchedule;
   description: string;
   title: string;
   tags: string[];
   locations: string[];
-  schedule: PostSchedule;
+}
+
+export interface Post extends EmptyPost {
+  id: string;
   // created_by: string;
   // created_at: Date;
 }

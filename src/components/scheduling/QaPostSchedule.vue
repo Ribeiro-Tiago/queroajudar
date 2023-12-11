@@ -5,11 +5,11 @@
     type="radio"
   />
 
-  <div v-show="scheduleType === 'recurring'" class="q-mx-auto text-center">
+  <div v-if="scheduleType === 'recurring'" class="q-mx-auto text-center">
     <qa-post-schedule-recurring-selector />
   </div>
 
-  <div v-show="scheduleType === 'specific'" class="q-mx-auto text-center">
+  <div v-if="scheduleType === 'specific'" class="q-mx-auto text-center">
     <qa-post-schedule-specific-selector />
   </div>
 </template>

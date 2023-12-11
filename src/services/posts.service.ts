@@ -1,4 +1,6 @@
 import { func } from "./firebase.service";
-import { Post } from "src/types/post";
+import { EmptyPost, Post } from "src/types/post";
 
-export const getPosts = async () => func<Post[]>("posts");
+export const getPosts = () => func<Post[]>("posts");
+
+export const addPost = (post: EmptyPost) => func("addPost", post);

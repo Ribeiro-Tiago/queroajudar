@@ -78,7 +78,7 @@ export default boot(({ app }) => {
         });
       }
 
-      return Promise.reject(new AxiosError(data.reason, status, data.errors));
+      return Promise.reject(new AxiosError(data.message, status, data.details));
     }
   );
 

@@ -2,10 +2,12 @@ import { Notify } from "quasar";
 import { initializeApp, getApp } from "firebase/app";
 import {
   Functions,
+  FunctionsError,
   connectFunctionsEmulator,
   getFunctions,
   httpsCallable,
 } from "firebase/functions";
+import { Errors, ValidationError } from "src/exceptions";
 
 let functions: Functions | null = null;
 
@@ -29,16 +31,22 @@ const getFuncs = () => {
   return functions;
 };
 
-export const func = async <T>(name: string) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const func = async <T>(name: string, payload?: any) => {
   try {
-    const callable = httpsCallable<any, T>(getFuncs(), name, {});
-    return (await callable()).data;
+    const callable = httpsCallable<FunctionsError, T>(getFuncs(), name, {});
+    return (await callable(payload)).data;
   } catch (err) {
+    const { code, details } = err as FunctionsError;
+
+    if (code === "functions/invalid-argument") {
+      throw new ValidationError(details as Errors);
+    }
+
     // todo: log to somewhere
     Notify.create({
       type: "negative",
       message: "Algo correu mal do nosso lado. \nTente mais tarde",
     });
-    return [];
   }
 };

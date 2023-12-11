@@ -161,7 +161,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { QForm, QSelect } from "quasar";
 
 import { required } from "src/utils/validators";
@@ -171,6 +171,9 @@ import { getCities } from "src/services/geoapify.service";
 import QaPostTag from "./QaPostTag.vue";
 import QaPostSchedule from "./scheduling/QaPostSchedule.vue";
 import { SelectOption } from "src/types/form";
+
+const $store = usePostsStore();
+const { errors, hasErrors, handleErrors, clearErrors } = useFormErrors();
 
 const title = ref<string>("");
 const description = ref<string>("");
@@ -189,9 +192,19 @@ const helpOptions = ref<SelectOption[]>([
 
 const submitting = ref<boolean>(false);
 
-const { errors, hasErrors, handleErrors, clearErrors } = useFormErrors();
+watch(
+  () => $store.dialogVisible,
+  (val) => {
+    if (!val) {
+      return;
+    }
 
-const $store = usePostsStore();
+    title.value = "";
+    description.value = "";
+    locationInput.value = [];
+    categoryInput.value = [];
+  }
+);
 
 const fetchLocations = async (
   text: string,
@@ -250,8 +263,6 @@ const submit = async () => {
     return;
   }
 
-  form.value.greedy = true;
-
   if (!(await form.value.validate())) {
     return;
   }
@@ -261,7 +272,6 @@ const submit = async () => {
 
   $store
     .createPost()
-    .then(() => $store.closeDialog())
     .catch(handleErrors)
     .finally(() => (submitting.value = false));
 };
