@@ -64,11 +64,16 @@ export const usePostsStore = defineStore("posts", {
     async createPost() {
       try {
         const res = await addPost(this.post as EmptyPost);
-        console.log(res);
-        // this.closeDialog();
+
+        if (res) {
+          this.posts.push(res);
+        }
+
+        this.closeDialog();
       } catch (err) {
         if (err instanceof ValidationError) {
           this.formErrors = err.toError();
+          return;
         }
 
         console.log(err);

@@ -175,14 +175,16 @@ import { SelectOption } from "src/types/form";
 const $store = usePostsStore();
 const { errors, hasErrors, handleErrors, clearErrors } = useFormErrors();
 
-const title = ref<string>("");
-const description = ref<string>("");
-const locationInput = ref<string[]>([]);
-const locations = ref<string[]>([]);
+const title = ref<string>("dsadsa");
+const description = ref<string>("dsadsa");
+const locationInput = ref<string[]>(["foo"]);
+const locations = ref<string[]>(["foo"]);
 const fetchingLocations = ref(false);
 
 const form = ref<QForm>();
-const categoryInput = ref<SelectOption[]>([]);
+const categoryInput = ref<SelectOption[]>([
+  { label: "Dinheiro", value: "money" },
+]);
 const helpOptions = ref<SelectOption[]>([
   { label: "Dinheiro", value: "money" },
   { label: "Voluntários", value: "people" },
@@ -198,6 +200,8 @@ watch(
     if (!val) {
       return;
     }
+
+    clearErrors();
 
     title.value = "";
     description.value = "";

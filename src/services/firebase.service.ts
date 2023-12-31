@@ -7,7 +7,10 @@ import {
   getFunctions,
   httpsCallable,
 } from "firebase/functions";
+
+import Router from "src/router";
 import { Errors, ValidationError } from "src/exceptions";
+import { useSessionStore } from "src/stores/session";
 
 let functions: Functions | null = null;
 
@@ -41,6 +44,13 @@ export const func = async <T>(name: string, payload?: any) => {
 
     if (code === "functions/invalid-argument") {
       throw new ValidationError(details as Errors);
+    }
+
+    if (code === "functions/unauthenticated") {
+      useSessionStore().clearUser();
+      Router.replace("login");
+      Notify.create({ type: "info", message: "A sua sessão expirou" });
+      return;
     }
 
     // todo: log to somewhere

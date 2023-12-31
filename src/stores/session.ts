@@ -28,7 +28,10 @@ export const useSessionStore = defineStore("session", {
 
     async logout() {
       await logout();
+      this.clearUser();
+    },
 
+    clearUser() {
       localStorage.removeItem("user");
       localStorage.removeItem("token");
       this._user = null;
